@@ -2,7 +2,7 @@
 import rethinkdbdash from 'rethinkdbdash'
 
 export const db = rethinkdbdash({
-    db: 'training',
+    db: 'crud',
     host: 'localhost',
     port: '28015'
-})
+}) 
