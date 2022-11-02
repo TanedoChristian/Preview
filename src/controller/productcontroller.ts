@@ -1,5 +1,5 @@
 
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { productModel } from "../models/productmodel";
 
     const sortProductsByDate = (data: any []) => {
@@ -14,8 +14,6 @@ import { productModel } from "../models/productmodel";
             const product : any [] = await productModel.fetchAllProduct();
 
             
-         
-
             const data : any [] = product.filter(item => item.quantity > 0)
             const toShow : any [] = sortProductsByDate(data)
 
@@ -82,6 +80,21 @@ import { productModel } from "../models/productmodel";
         }
     }
 
+    const deleteAllProduct = async(req: Request, res: Response) => {
+        try {
+
+            const result = await productModel.deleteAllProduct()
+            res.status(200).json({
+                message: "Successfully deleted product"
+            })
+
+        } catch(err) {
+            res.status(404).json({
+                eror: err
+            })
+        }
+    }
+
     const deleteProductById = async(req: Request, res: Response) => {
         
         try {
@@ -111,9 +124,6 @@ import { productModel } from "../models/productmodel";
         const id = req.params.id
         
         try {
-
-      
-          
 
             const result = await productModel.updateProductById(data, id)
             const prevData : any [] = await productModel.fetchAllProduct()
@@ -151,37 +161,30 @@ import { productModel } from "../models/productmodel";
         const data = req.body
 
         try {
-
-            
             if(Object.entries(data).length <= 0 || !data.hasOwnProperty('id')) {
                 res.status(404).json({
                     error: "No request found"
                 })
                 return 
             }
-
             const result = await productModel.updateProduct(data)
-
             if(result.replaced > 0 ||  result.unchanged > 0){
 
                 res.status(200).json({
                     updated: data
                 })
             } 
-
             else {
                 res.status(404).json({
                     error: "Product not found"
                 })
             }
-                
         } catch (err) {
             res.status(404).json({
                 error: err
             })
         }
-
-}
+    }
 
 
 
@@ -190,6 +193,7 @@ module.exports = {
     postProduct,
     fetchAllProduct,
     fetchProductById,
+    deleteAllProduct,
     deleteProductById,
     updateProduct,
     updateProductById

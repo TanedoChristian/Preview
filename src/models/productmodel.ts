@@ -18,6 +18,11 @@ export const productModel = {
         return result
     },
     
+    deleteAllProduct: async() => {
+        const result = await db("crud").table("products").delete().run()
+        return result
+    },
+
     deleteProductById: async(id: any) => {
         const result = await db.table('products').filter({
             id: id
